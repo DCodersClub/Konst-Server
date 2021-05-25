@@ -15,7 +15,7 @@ app.use(cors());
 // Routes
 
 // Server Start
-app.listen(PORT, () => {
+app.listen(PORT || 8000, () => {
   const urlLink = link(`http://localhost:${PORT}`);
   successLog(`Serving Setup And Running On ${urlLink}`);
 });
