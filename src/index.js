@@ -2,9 +2,11 @@ const { connect } = require('mongoose');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 
 const { successLog, link, errorLog } = require('./utils/logs');
-const User = require('./models/user');
+const authRoutes = require('./routes/authentication');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 const { PORT, DB_URL } = process.env;
 
@@ -19,22 +21,16 @@ connect(DB_URL, {
 
 //Express
 const app = express();
-
 // Middlewares
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
 // Routes
+app.use('/api', authRoutes);
 
-const user = new User({
-  firstName: 'Harsh',
-  lastName: 'Rastogi',
-  password: 'be18cs044',
-  email: 'rastogiharsh04@gmail.com',
-});
-user.validate();
-
+app.use(errorHandler);
 // Server Start
 app.listen(PORT || 8000, () => {
   const urlLink = link(`http://localhost:${PORT}`);

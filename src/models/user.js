@@ -9,8 +9,8 @@ const UserSchema = new Schema(
   {
     firstName: {
       type: String,
-      min: 3,
-      max: 100,
+      minLength: [3, 'Name Is Quite Small'],
+      maxLength: [100, 'Too Large'],
       required: [true, 'firstName Required'],
       trim: true,
     },
@@ -21,7 +21,7 @@ const UserSchema = new Schema(
       type: String,
       lowercase: true,
       required: [true, 'email Required'],
-      unique: true,
+      unique: [true, 'Email Already Exists'],
       validate: {
         validator: (value) => emailRegex.test(value),
         message: ({ value }) => `${value} is not a valid email`,
@@ -40,6 +40,18 @@ UserSchema.methods = {
 
   authenticate: function (simplePassword) {
     return this.securePassword(simplePassword) === this.encryptPassword;
+  },
+
+  // removes few proper before sending to client user property for
+  toClient: function () {
+    const user = this;
+    return {
+      name: {
+        first: user.firstName,
+        last: user.lastName,
+      },
+      email: user.email,
+    };
   },
 };
 
