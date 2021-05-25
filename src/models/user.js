@@ -3,7 +3,7 @@ const { createHmac } = require('crypto');
 const { v1: uudiV4 } = require('uuid');
 
 const emailRegex =
-  /^(([^<>()[]\.,;:s@"]+(.[^<>()[]\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/gim;
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const UserSchema = new Schema(
   {
@@ -48,4 +48,4 @@ UserSchema.virtual('password').set(function (password) {
   this.encryptPassword = this.securePassword(password);
 });
 
-exports.module = model('User', UserSchema);
+module.exports = model('User', UserSchema);
