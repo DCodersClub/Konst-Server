@@ -1,11 +1,23 @@
+const { connect } = require('mongoose');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const cors = require('cors');
-const { successLog, link } = require('./utils/logs');
+
+const { successLog, link, errorLog } = require('./utils/logs');
 const User = require('./models/user');
 
-const { PORT } = process.env;
+const { PORT, DB_URL } = process.env;
 
+// DB Connection
+connect(DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+})
+  .then(() => successLog('Database Connected'))
+  .catch((reason) => errorLog(reason));
+
+//Express
 const app = express();
 
 // Middlewares

@@ -5,6 +5,11 @@ exports.link = (link = '') => {
 };
 
 exports.successLog = (message = '') => {
-  const text = chalk.yellowBright(message);
+  const text = chalk.greenBright(message);
+  console.log(text);
+};
+
+exports.errorLog = (message = '') => {
+  const text = chalk.bgRed.white(message);
   console.log(text);
 };
