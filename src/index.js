@@ -6,6 +6,7 @@ const morgan = require('morgan');
 
 const { successLog, link, errorLog } = require('./utils/logs');
 const authRoutes = require('./routes/authentication');
+const userRoutes = require('./routes/user');
 const { errorHandler } = require('./middlewares/errorHandler');
 
 const { PORT, DB_URL } = process.env;
@@ -29,6 +30,7 @@ app.use(cors());
 
 // Routes
 app.use('/api', authRoutes);
+app.use('/api/user', userRoutes);
 
 app.use(errorHandler);
 // Server Start

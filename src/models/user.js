@@ -31,6 +31,21 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
+UserSchema.statics = {
+  findUserByEmail: async function (email) {
+    if (!email) throw new Error(`Email Expected Got, ${email}`);
+    const user = await this.findOne({ email });
+
+    return user;
+  },
+  findUserById: async function (id) {
+    if (!id) throw new Error(`Email Expected Got, ${id}`);
+    const user = await this.findById(id);
+
+    return user;
+  },
+};
+
 UserSchema.methods = {
   securePassword: function (simplePassword) {
     if (!simplePassword) throw new Error('Parameters Not Passed');

@@ -24,6 +24,6 @@ exports.errorHandler = (err, req, res, next) => {
     // if (err.name && err.message) return res.json({ name: err.name, message: err.message });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'An unknown error occurred.' });
+    res.status(500).json({ message: 'An unknown error occurred.', err });
   }
 };

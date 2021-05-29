@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
+// eslint-disable-next-line no-undef
 const SECRET = process.env.SECRETJWT;
 /**
- *
  * @param {any} value Object Or String To Encoded
  * @returns {String} token Value
  */
@@ -17,6 +17,6 @@ exports.jsonWebToken = (value) => {
  */
 
 exports.parseWebToken = (token) => {
-  if (!token) throw new Error(`Expected Other Null Or Undefined, Got ${value}`);
+  if (!token) throw new Error(`Expected Other Null Or Undefined, Got ${token}`);
   return jwt.verify(token, SECRET);
 };
