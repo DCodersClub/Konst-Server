@@ -7,7 +7,6 @@ exports.getUserById = async (req, res, next, id) => {
     addToPayload(req, { user });
     next();
   } catch (e) {
-    console.log(e);
     next(e);
   }
 };

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, isValidObjectId } = require('mongoose');
 const { createHmac } = require('crypto');
 const { v1: uudiV4 } = require('uuid');
 
@@ -17,6 +17,7 @@ const UserSchema = new Schema(
     lastName: { type: String, min: 3, max: 100, required: true, trim: true },
     encryptPassword: { type: String, required: true },
     salt: String,
+    type: { type: String, enum: ['user', 'admin'], default: 'user' },
     email: {
       type: String,
       lowercase: true,
@@ -27,6 +28,7 @@ const UserSchema = new Schema(
         message: ({ value }) => `${value} is not a valid email`,
       },
     },
+    isVerified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
@@ -38,7 +40,10 @@ UserSchema.statics = {
 
     return user;
   },
+
   findUserById: async function (id) {
+    const a = new Error();
+    if (!isValidObjectId(id)) throw new Error('Not Valid UserId');
     if (!id) throw new Error(`Email Expected Got, ${id}`);
     const user = await this.findById(id);
 
@@ -65,6 +70,8 @@ UserSchema.methods = {
         first: user.firstName,
         last: user.lastName,
       },
+      varified: user.isVerified,
+      type: user.type === 'admin' && user.type,
       email: user.email,
     };
   },

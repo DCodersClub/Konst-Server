@@ -1,0 +1,6 @@
+@path=/api
+@route={{url}}{{port}}{{path}} 
+@userid=60b2244639430120e00a9f1b
+// update userid when adding 
+# test
+GET {{route}}/user/{{userid}} HTTP/1.1  

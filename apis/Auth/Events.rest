@@ -1,0 +1,28 @@
+@path=/api/event
+@route={{url}}{{port}}{{path}} 
+
+POST {{route}}/new HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Texho Quiz",
+    "description": "Nothing",
+    "registration": {
+      "start": 1622381578000,
+      "end": 1638279178000
+    },
+    "schedule": {
+      "start": 1638279178000,
+      "end": 1638279179000
+    },
+    "questions": [
+      {
+        "type": "mcq",
+        "question": {
+          "value": "What Is Computer",
+          "options": [{ "value": "Device" }, { "value": "Machine" }, { "value": "Computer" }]
+        },
+        "correct": 3
+      }
+    ]
+  }

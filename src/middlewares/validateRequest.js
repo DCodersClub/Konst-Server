@@ -53,7 +53,6 @@ exports.validateEmail = (option) => {
   // return middleWare
   return async (req, res, next) => {
     const email = req[checkIn][name];
-    console.log(email);
 
     if (!email)
       return res.status(404).json({ name: 'Invalid Request', message: `${name} Required` });

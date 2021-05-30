@@ -21,7 +21,6 @@ exports.signin = (req, res) => {
     return res.status(401).json({ name: 'Unauthorised', message: 'Invalid Credentials' });
   const token = jsonWebToken({ _id: user._id });
   res.cookie('token', token);
-  console.log(user.authenticate(password));
   return res.json({ user: { ...user.toClient(), id: user._id }, token });
 };
 
@@ -37,6 +36,11 @@ exports.signin = (req, res) => {
  * @param {LoggedIn} option
  * @returns {MiddleWare}
  */
+
+exports.signout = (req, res) => {
+  res.cookie('token', '');
+  res.send();
+};
 
 exports.isLoggedIn = (option = {}) => {
   if (typeof option !== 'object') throw new Error(`Expected Object, Got, ${typeof option}`);
