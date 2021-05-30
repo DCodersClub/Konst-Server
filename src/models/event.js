@@ -1,5 +1,6 @@
 const { Schema, model, Types } = require('mongoose');
 const { customAlphabet } = require('nanoid');
+const { generateError } = require('../utils');
 const mcqquestion = require('./question/mcq');
 
 const participants = new Schema({
@@ -67,7 +68,8 @@ eventSchema
   });
 
 eventSchema.virtual('type').set(function (type) {
-  if (typeof type !== 'string') throw new Error(`Expected string, got ${typeof type}`);
+  if (typeof type !== 'string')
+    generateError('Invalid Type', `Expected string, got ${typeof type}`);
   this._type = type;
 });
 

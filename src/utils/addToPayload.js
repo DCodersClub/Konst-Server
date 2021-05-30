@@ -1,3 +1,4 @@
+const { generateError } = require('.');
 /**
  * Add data to req.payload
  * @param {Object} req - Request Object
@@ -7,7 +8,7 @@
 
 module.exports = (req, data = {}) => {
   if (typeof req !== 'object' || typeof data !== 'object')
-    throw new Error('MisMatched Type: Passed Parameters Must Be Objects');
+    generateError('Type Error', 'MisMatched Type: Passed Parameters Must Be Objects');
   if (!req.payload) req.payload = { ...data };
   else req.payload = { ...req.payload, ...data };
 };

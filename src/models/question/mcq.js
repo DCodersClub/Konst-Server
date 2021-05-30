@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { nanoid } = require('nanoid');
+const { generateError } = require('../../utils');
 
 const optionSchema = new Schema(
   {
@@ -48,9 +49,10 @@ mcqScehma.methods = {
 
 mcqScehma.pre('validate', function (next) {
   if (!Number.isInteger(parseInt(this.correct)))
-    throw new Error(`Expected CORRECT type number, got ${typeof this.correct}`);
+    generateError('Type Error', `Expected CORRECT type number, got ${typeof this.correct}`);
 
-  if (this.correct >= 4) throw new Error(`Expected CORRECT value 0 <= value <= ${4 - 1}`);
+  if (this.correct >= 4)
+    generateError('Mismatched Value', `Expected CORRECT value 0 <= value <= ${4 - 1}`);
 
   this._addIdToOptions();
   this.quesID = nanoid(5);

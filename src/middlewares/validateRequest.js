@@ -2,6 +2,7 @@ const { isEmail } = require('validator');
 
 const addToPayload = require('../utils/addToPayload');
 const User = require('../models/user');
+const { generateError } = require('../utils');
 
 /**
  * @typedef options
@@ -43,12 +44,16 @@ exports.validateEmail = (option) => {
 
   // Validate CHECK field in config
   if (!validateCheckInField(checkIn))
-    throw new Error(`Check Must In One Of These body|headers|cookies|params|query, GOT ${checkIn}`);
+    generateError(
+      'Invalid Field',
+      `Check Must In One Of These body|headers|cookies|params|query, GOT ${checkIn}`
+    );
 
   // Validate Option Property
   const checkIsBoolean = () =>
     [checkDB, save, forwardError].every((val) => typeof val === 'boolean');
-  if (!checkIsBoolean()) throw new Error('One Of Option Property Is Not Boolean');
+
+  if (!checkIsBoolean()) generateError('Type Error', 'One Of Option Property Is Not Boolean');
 
   // return middleWare
   return async (req, res, next) => {
@@ -92,11 +97,15 @@ exports.validateEmail = (option) => {
  */
 
 exports.validatePassword = (option = {}) => {
-  if (typeof option !== 'object') throw new Error(`Config Must Be Object, GOT: ${typeof option}`);
+  if (typeof option !== 'object')
+    generateError('Type Error', `Config Must Be Object, GOT: ${typeof option}`);
   const { checkIn } = { checkIn: 'body', ...option };
 
   if (!validateCheckInField(checkIn))
-    throw new Error(`Check Must In One Of These body|headers|cookies|params|query, GOT ${checkIn}`);
+    generateError(
+      'Invalid',
+      `Check Must In One Of These body|headers|cookies|params|query, GOT ${checkIn}`
+    );
 
   return (req, res, next) => {
     const { password } = req[checkIn];

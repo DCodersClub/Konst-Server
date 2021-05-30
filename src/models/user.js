@@ -1,6 +1,7 @@
 const { Schema, model, isValidObjectId } = require('mongoose');
 const { createHmac } = require('crypto');
 const { v1: uudiV4 } = require('uuid');
+const { generateError } = require('../utils');
 
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -35,7 +36,7 @@ const UserSchema = new Schema(
 
 UserSchema.statics = {
   findUserByEmail: async function (email) {
-    if (!email) throw new Error(`Email Expected Got, ${email}`);
+    if (!email) generateError(('Invalid Type', `Email Expected Got, ${email}`));
     const user = await this.findOne({ email });
 
     return user;
@@ -43,8 +44,8 @@ UserSchema.statics = {
 
   findUserById: async function (id) {
     const a = new Error();
-    if (!isValidObjectId(id)) throw new Error('Not Valid UserId');
-    if (!id) throw new Error(`Email Expected Got, ${id}`);
+    if (!isValidObjectId(id)) generateError('Invalid', 'Not Valid UserId');
+    if (!id) generateError(('Invalid Type', `ID Expected Got, ${id}`));
     const user = await this.findById(id);
 
     return user;
@@ -53,7 +54,7 @@ UserSchema.statics = {
 
 UserSchema.methods = {
   securePassword: function (simplePassword) {
-    if (!simplePassword) throw new Error('Parameters Not Passed');
+    if (!simplePassword) generateError('Value Error', 'Parameters Not Passed');
     const encryptPassword = createHmac('sha256', this.salt).update(simplePassword).digest('hex');
     return encryptPassword;
   },

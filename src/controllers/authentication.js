@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { generateError } = require('../utils');
 const { jsonWebToken, parseWebToken } = require('../utils/authToken');
 
 exports.signup = async (req, res, next) => {
@@ -43,7 +44,8 @@ exports.signout = (req, res) => {
 };
 
 exports.isLoggedIn = (option = {}) => {
-  if (typeof option !== 'object') throw new Error(`Expected Object, Got, ${typeof option}`);
+  if (typeof option !== 'object')
+    generateError('TypeError', `Expected Object, Got, ${typeof option}`);
   const { save } = { save: false, ...option }; // ignore this for now, not effect entire function if this is removed
 
   return (req, res, next) => {
