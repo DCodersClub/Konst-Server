@@ -51,8 +51,9 @@ exports.isLoggedIn = (option = {}) => {
   return (req, res, next) => {
     try {
       const { user } = req.payload;
-      const { token } = req.cookies;
-      if (!token) res.status(401).json({ name: 'Unauthorised', message: 'User Token Not Found' });
+      const token = req.headers.authorization.slice('Bearer '.length);
+      if (!token)
+        return res.status(401).json({ name: 'Unauthorised', message: 'User Token Not Found' });
       const parsedToken = parseWebToken(token);
 
       if (user._id.toString() !== parsedToken._id)

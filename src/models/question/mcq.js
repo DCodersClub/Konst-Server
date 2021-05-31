@@ -4,54 +4,71 @@ const { generateError } = require('../../utils');
 
 const optionSchema = new Schema(
   {
-    value: { type: String, required: true, trim: true, minLength: 1 },
+    value: { type: String, required: true, trim: true, minLength: 1, maxLength: 1000 },
     id: { type: String, required: true },
   },
   { _id: false }
 );
 
-const mcqScehma = new Schema({
-  type: { type: String, defaultValue: 'mcq' },
-  value: {
-    type: String,
-    required: true,
-    maxLength: 300,
-    minLength: 10,
+const bodySchema = new Schema(
+  {
+    text: {
+      type: String,
+      required: true,
+      maxLength: 300,
+      minLength: 10,
+      trim: true,
+    },
+    options: {
+      type: [optionSchema],
+      required: true,
+      validate: {
+        validator: (value) => value.length === 4,
+        message: () => `Total Option Must Be 4`,
+      },
+    },
+    correct: { type: {}, required: true },
   },
-  options: {
-    type: [optionSchema],
-    required: true,
+  { _id: false }
+);
+
+const mcqScehma = new Schema({
+  type: {
+    type: String,
+    defaultValue: 'mcq',
     validate: {
-      validator: (value) => value.length === 4,
-      message: () => `Total Option Must Be 4`,
+      validator: (type) => /mcq/.test(type),
+      message: 'Only MCQ is valid type',
     },
   },
-  correct: { type: {}, required: true },
   quesID: {
     type: String,
+    required: true,
+    unique: true,
+  },
+  body: {
+    type: bodySchema,
     required: true,
   },
 });
 
 mcqScehma.methods = {
   _addIdToOptions: function () {
-    console.log('correct' in this, typeof this.correct);
-    this.options.forEach((option, i) => {
+    const { options, correct } = this.body;
+    options.forEach((option, i) => {
       option.id = nanoid(5);
-      if (this.correct == i) {
-        console.log(this.correct);
-        this.correct = option;
-        this.test = option;
-      }
+
+      if (correct == i) this.body.correct = option;
     });
   },
 };
 
 mcqScehma.pre('validate', function (next) {
-  if (!Number.isInteger(parseInt(this.correct)))
-    generateError('Type Error', `Expected CORRECT type number, got ${typeof this.correct}`);
+  const { correct } = this.body;
+  if (!Number.isInteger(parseInt(correct)))
+    generateError('Type Error', `Expected CORRECT type number, got ${typeof correct}`);
 
-  if (this.correct >= 4)
+  if (correct >= 4)
     generateError('Mismatched Value', `Expected CORRECT value 0 <= value <= ${4 - 1}`);
 
   this._addIdToOptions();
@@ -59,4 +76,4 @@ mcqScehma.pre('validate', function (next) {
   next();
 });
 
-module.exports = model('mcq', mcqScehma);
+module.exports = model('Question', mcqScehma);

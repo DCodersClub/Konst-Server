@@ -26,7 +26,7 @@ exports.errorHandler = (err, req, res, next) => {
     if (err.name === 'ValidationError') return handleValidationError(err, res);
     if (err.code && err.code == 11000) return handelDuplicationError(err, res);
     if (err.name === 'CastError') return handelCastError(err, res);
-    console.log(err);
+    // console.log(err);
     res.status(500).json({ name: err.name, message: err.message });
   } catch (err) {
     console.log(err);

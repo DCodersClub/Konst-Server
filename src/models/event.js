@@ -1,7 +1,6 @@
 const { Schema, model, Types } = require('mongoose');
-const { customAlphabet } = require('nanoid');
+const { nanoid } = require('nanoid');
 const { generateError } = require('../utils');
-const mcqquestion = require('./question/mcq');
 
 const participants = new Schema({
   user: { type: Types.ObjectId, ref: 'User' },
@@ -40,7 +39,7 @@ const eventSchema = new Schema(
 );
 
 eventSchema.pre('validate', function (next) {
-  this.eventId = customAlphabet(this.name, 10)();
+  this.eventId = nanoid(7);
   next();
 });
 
