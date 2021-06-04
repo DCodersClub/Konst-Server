@@ -2,11 +2,22 @@ const { Schema, model, Types } = require('mongoose');
 const { nanoid } = require('nanoid');
 const { generateError } = require('../utils');
 
-const participants = new Schema({
-  user: { type: Types.ObjectId, ref: 'User' },
-  questionSolved: { type: Number, default: 0 },
-  questionCorrect: { type: Number, default: 0 },
-});
+const participants = new Schema(
+  {
+    user: { type: Types.ObjectId, ref: 'User' },
+    questionSolved: { type: Number, default: 0 },
+    questionCorrect: { type: Number, default: 0 },
+  },
+  { _id: false }
+);
+
+participants.methods = {
+  toClient: function () {
+    const user = this.user.toClient();
+
+    return { ...this.toJSON(), user };
+  },
+};
 
 const time = new Schema(
   {
@@ -39,9 +50,36 @@ const eventSchema = new Schema(
 );
 
 eventSchema.pre('validate', function (next) {
-  this.eventId = nanoid(7);
+  if (!this.eventId) this.eventId = nanoid(7);
   next();
 });
+
+eventSchema.methods = {
+  toClient: function () {
+    const event = this;
+
+    return {
+      name: event.name,
+      description: event.description,
+      eventId: event.eventId,
+      registration: event.registration,
+      schedule: event.schedule,
+      participantCount: event.participants.length,
+    };
+  },
+};
+
+eventSchema.statics = {
+  /**
+   * Finds Event Id
+   * @param {String} eventId Event Id
+   * @returns {Null|Event}
+   */
+  findByEventId: async function (eventId) {
+    const event = this.findOne({ eventId });
+    return event;
+  },
+};
 
 const toTimeNumber = (timeString) => new Date(timeString).getTime();
 eventSchema
@@ -72,4 +110,5 @@ eventSchema.virtual('type').set(function (type) {
   this._type = type;
 });
 
-module.exports = model('Events', eventSchema);
+const Event = model('Events', eventSchema);
+module.exports = Event;

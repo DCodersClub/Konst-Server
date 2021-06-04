@@ -71,8 +71,8 @@ UserSchema.methods = {
         first: user.firstName,
         last: user.lastName,
       },
-      varified: user.isVerified,
-      type: user.type === 'admin' && user.type,
+      verified: user.isVerified,
+      type: user.type === 'admin' ? 'admin' : 'user',
       email: user.email,
     };
   },
