@@ -1,21 +1,20 @@
 @path=/api
 @route={{url}}{{port}}{{path}} 
-GET {{route}}/signup HTTP/1.1
 
-### 
-# Posting User For Signup
+// Sign up
 POST {{route}}/signup HTTP/1.1
 Content-Type: application/json
 
 {
   "firstName": "John",
   "lastName": "Smith",
-  "email": "smithjohn@example.com",
+  "email": "smithjohn@exampe.com",
   "password": "smithJone"
 }
 
-###
-# Signing In User
+###//-----------------------------------------------------------------------
+
+// Sign In
 POST {{route}}/signin HTTP/1.1
 Content-Type: application/json
 
@@ -24,6 +23,7 @@ Content-Type: application/json
   "password": "smithJone"
 }
 
-### 
-# signout
+###//-----------------------------------------------------------------------
+
+// Sign Out
 GET {{route}}/signout HTTP/1.1

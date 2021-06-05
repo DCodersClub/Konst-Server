@@ -1,0 +1,9 @@
+@path=/api
+@route={{url}}{{port}}{{path}} 
+// update userid when creating user and want to sign up with that 
+@userid=60bb20c5b6231244acbc357e
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGJiMjBjNWI2MjMxMjQ0YWNiYzM1N2UiLCJpYXQiOjE2MjI4OTI3NDJ9.F2N-_7JYvi9nIOfpta1eau7M1aWCsW7n2yT0gfCFZ7Q
+
+// Get User Data
+GET {{route}}/user/{{userid}} HTTP/1.1
+Authorization: Bearer {{token}}

@@ -1,0 +1,33 @@
+@path=/api/event
+@route={{url}}{{port}}{{path}} 
+
+// create new event
+
+POST {{route}}/new HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Texho Quiz",
+    "description": "WasdasdOW",
+    "registration": {
+      "start": 1622381578000,
+      "end": 1638279178000
+    },
+    "schedule": {
+      "start": 1638279178000,
+      "end" : 1638279179000
+    }
+}
+
+###//-----------------------------------------------------------------------
+
+# Adding Participants To Event 
+@eventId=85pBHKw
+@userId=60bb29bb6cf6fe16f49b5a88
+
+POST {{route}}/{{eventId}}/register/{{userId}} HTTP/1.1
+
+###//-----------------------------------------------------------------------
+
+# Get Data With All Paticipants
+GET {{route}}/{{eventId}} HTTP/1.1
