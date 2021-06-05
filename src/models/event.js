@@ -11,6 +11,13 @@ const userData = new Schema(
   subdoucmentConfig
 );
 
+const question = new Schema(
+  {
+    question: { type: Types.ObjectId, ref: 'Question' },
+  },
+  subdoucmentConfig
+);
+
 const time = new Schema(
   {
     start: { type: Number, required: true },
@@ -27,6 +34,7 @@ const eventSchema = new Schema(
     _registration: { type: time, required: true },
     _schedule: { type: time, required: true },
     participants: { type: [userData], unique: true },
+    questions: { type: [question] },
   },
   { timestamps: true }
 );
@@ -45,9 +53,14 @@ eventSchema.methods = {
   },
 
   addParticipant: function (user) {
-    const found = this.participants.find((participant) => participant.user === user.id) !== -1;
+    const found = !!this.participants.find((participant) => participant.user == user.id);
     if (found) return false; // not inserted
     this.participants.push({ user });
+    return true;
+  },
+
+  addQuestion: function (question) {
+    this.questions.push({ question });
     return true;
   },
 };

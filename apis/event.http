@@ -31,3 +31,20 @@ POST {{route}}/{{eventId}}/register/{{userId}} HTTP/1.1
 
 # Get Data With All Paticipants
 GET {{route}}/{{eventId}} HTTP/1.1
+
+###//-----------------------------------------------------------------------
+
+
+// Add Questions To Event
+
+POST {{route}}/{{eventId}}/question/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "type": "mcq",
+  "body": {
+    "text": "What is the day",
+    "options": [{"value":"Monday"}, {"value":"Friday"}, {"value":"Wednesday"}, {"value":"Tuesday"}],
+    "correct": 1
+  }
+}
