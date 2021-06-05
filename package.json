@@ -4,10 +4,12 @@
   "main": "index.js",
   "repository": "https://github.com/DCodersClub/Konst-Server.git",
   "author": "",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "start": "node -r dotenv/config src/index.js",
-    "dev": "nodemon -r dotenv/config src/index.js"
+    "dev": "nodemon -r dotenv/config src/index.js",
+    "build": "webpack"
   },
   "dependencies": {
     "chalk": "^4.1.1",

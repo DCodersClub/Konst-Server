@@ -1,5 +1,6 @@
 {
   "files.autoSave": "onFocusChange",
+  "editor.fontSize": 14,
   "rest-client.environmentVariables": {
     "$shared": {
       "version": "v1",
