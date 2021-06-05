@@ -12,13 +12,8 @@ const optionSchema = new Schema(
 
 const bodySchema = new Schema(
   {
-    text: {
-      type: String,
-      required: true,
-      maxLength: 300,
-      minLength: 10,
-      trim: true,
-    },
+    text: { type: String, required: true, maxLength: 300, minLength: 10, trim: true },
+    correct: { type: {}, required: true },
     options: {
       type: [optionSchema],
       required: true,
@@ -27,7 +22,6 @@ const bodySchema = new Schema(
         message: () => `Total Option Must Be 4`,
       },
     },
-    correct: { type: {}, required: true },
   },
   { _id: false }
 );
@@ -41,15 +35,8 @@ const mcqScehma = new Schema({
       message: 'Only MCQ is valid type',
     },
   },
-  quesID: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  body: {
-    type: bodySchema,
-    required: true,
-  },
+  quesID: { type: String, required: true, unique: true },
+  body: { type: bodySchema, required: true },
 });
 
 mcqScehma.methods = {

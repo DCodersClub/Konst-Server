@@ -1,3 +1,4 @@
+const Event = require('../models/event');
 const User = require('../models/user');
 const addToPayload = require('../utils/addToPayload');
 
@@ -11,7 +12,8 @@ exports.getUserById = async (req, res, next, id) => {
   }
 };
 
-exports.sendUserData = (req, res) => {
+exports.sendUserData = async (req, res) => {
   const { user } = req.payload;
-  res.json(user.toClient());
+  const events = await Event.find({ 'participants.user': user._id });
+  res.json({ ...user.toClient(), events: events.map(({ name, eventId }) => ({ name, eventId })) });
 };
