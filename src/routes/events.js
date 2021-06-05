@@ -8,6 +8,7 @@ const {
   addQuestionToEvent,
 } = require('../controllers/events');
 const { getUserById } = require('../controllers/user');
+const { queryParser } = require('../middlewares/queryParser');
 
 const route = Router();
 
@@ -16,6 +17,7 @@ route.param('userId', getUserById);
 
 route.post('/new', createEvent);
 route.post('/:eventId/register/:userId', addParticipantToEvent);
+
 route.get('/:eventId', getEventData);
 route.post('/:eventId/question/create', addQuestionToEvent);
 

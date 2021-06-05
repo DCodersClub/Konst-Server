@@ -24,6 +24,7 @@ exports.createEvent = async (req, res, next) => {
 exports.addParticipantToEvent = async (req, res, next) => {
   try {
     const { user, event } = req.payload;
+
     const inserted = event.addParticipant(user);
     if (!inserted) generateError('409', 'User Already Participated');
     await event.save();
@@ -33,15 +34,35 @@ exports.addParticipantToEvent = async (req, res, next) => {
   }
 };
 
+const populateParticipant = async (event) => {
+  await event.populate('participants.user').execPopulate();
+  return event.participants.map((data) => ({
+    ...data.toJSON(),
+    user: data.user.toClient(),
+  }));
+};
+const populateQuestion = async (event) => {
+  await event.populate('questions.question').execPopulate();
+  return event.questions.map(({ question }) => ({
+    type: question.type,
+    id: question.quesID,
+    body: question.body,
+  }));
+};
+
+const toBool = (val) => (val ? (val.trim().toLowerCase() === 'false' ? false : true) : false);
+
 exports.getEventData = async (req, res, next) => {
   try {
     const { event } = req.payload;
-    await event.populate('participants.user').execPopulate();
-    const participants = event.participants.map((data) => ({
-      ...data.toJSON(),
-      user: data.user.toClient(),
-    }));
-    res.json({ ...event.toClient(), participants });
+    let { participants: insertParticipants, questions: insertQuestion } = req.query;
+    insertParticipants = toBool(insertParticipants);
+    insertQuestion = toBool(insertQuestion);
+
+    const participants = insertParticipants ? await populateParticipant(event) : undefined;
+    const questions = insertQuestion ? await populateQuestion(event) : undefined;
+
+    res.json({ ...event.toClient(), participants, questions });
   } catch (e) {
     next(e);
   }
